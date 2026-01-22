@@ -1,0 +1,202 @@
+#include <iostream>
+#include <vector>
+#include <ctime>
+#include <iomanip>
+using namespace std;
+
+// ---------------- Transaction Class ----------------
+class Transaction {
+public:
+    string type;
+    double amount;
+    string timeStamp;
+
+    Transaction(string t, double a) {
+        type = t;
+        amount = a;
+
+        time_t now = time(0);
+        timeStamp = ctime(&now);
+        timeStamp.pop_back(); // remove newline
+    }
+};
+
+// ---------------- Account Class ----------------
+class Account {
+private:
+    int accountNumber;
+    double balance;
+    vector<Transaction> transactions;
+
+public:
+    Account(int accNo) {
+        accountNumber = accNo;
+        balance = 0.0;
+    }
+
+    int getAccountNumber() {
+        return accountNumber;
+    }
+
+    double getBalance() {
+        return balance;
+    }
+
+    void deposit(double amount) {
+        balance += amount;
+        transactions.emplace_back("Deposit", amount);
+        cout << "✅ Deposit successful.\n";
+    }
+
+    bool withdraw(double amount) {
+        if (amount > balance) {
+            cout << "❌ Insufficient balance.\n";
+            return false;
+        }
+        balance -= amount;
+        transactions.emplace_back("Withdrawal", amount);
+        cout << "✅ Withdrawal successful.\n";
+        return true;
+    }
+
+    bool transfer(Account &toAccount, double amount) {
+        if (withdraw(amount)) {
+            toAccount.balance += amount;
+            transactions.emplace_back("Transfer Sent", amount);
+            toAccount.transactions.emplace_back("Transfer Received", amount);
+            cout << "✅ Transfer successful.\n";
+            return true;
+        }
+        return false;
+    }
+
+    void showTransactions() {
+        if (transactions.empty()) {
+            cout << "No transactions found.\n";
+            return;
+        }
+
+        cout << "\n--- Transaction History ---\n";
+        for (auto &t : transactions) {
+            cout << t.timeStamp << " | "
+                 << t.type << " | ₹"
+                 << fixed << setprecision(2)
+                 << t.amount << endl;
+        }
+    }
+};
+
+// ---------------- Customer Class ----------------
+class Customer {
+private:
+    string name;
+    int customerId;
+    Account account;
+
+public:
+    Customer(string n, int id, int accNo)
+        : name(n), customerId(id), account(accNo) {}
+
+    int getCustomerId() {
+        return customerId;
+    }
+
+    Account& getAccount() {
+        return account;
+    }
+
+    void showAccountInfo() {
+        cout << "\nCustomer Name: " << name << endl;
+        cout << "Customer ID: " << customerId << endl;
+        cout << "Account Number: " << account.getAccountNumber() << endl;
+        cout << "Balance: ₹" << fixed << setprecision(2)
+             << account.getBalance() << endl;
+    }
+};
+
+// ---------------- Main Program ----------------
+int main() {
+    vector<Customer> customers;
+    int choice;
+
+    do {
+        cout << "\n==== Banking System ====\n";
+        cout << "1. Create Customer\n";
+        cout << "2. Deposit\n";
+        cout << "3. Withdraw\n";
+        cout << "4. Transfer Funds\n";
+        cout << "5. View Account Info\n";
+        cout << "6. View Transactions\n";
+        cout << "7. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            string name;
+            int id, accNo;
+
+            cout << "Enter customer name: ";
+            cin >> name;
+            cout << "Enter customer ID: ";
+            cin >> id;
+            cout << "Enter account number: ";
+            cin >> accNo;
+
+            customers.emplace_back(name, id, accNo);
+            cout << "✅ Customer created successfully.\n";
+        }
+
+        else if (choice >= 2 && choice <= 6) {
+            int id;
+            cout << "Enter customer ID: ";
+            cin >> id;
+
+            bool found = false;
+            for (auto &c : customers) {
+                if (c.getCustomerId() == id) {
+                    found = true;
+
+                    if (choice == 2) {
+                        double amt;
+                        cout << "Enter amount: ";
+                        cin >> amt;
+                        c.getAccount().deposit(amt);
+                    }
+                    else if (choice == 3) {
+                        double amt;
+                        cout << "Enter amount: ";
+                        cin >> amt;
+                        c.getAccount().withdraw(amt);
+                    }
+                    else if (choice == 4) {
+                        int toId;
+                        double amt;
+                        cout << "Transfer to customer ID: ";
+                        cin >> toId;
+                        cout << "Enter amount: ";
+                        cin >> amt;
+
+                        for (auto &to : customers) {
+                            if (to.getCustomerId() == toId) {
+                                c.getAccount().transfer(to.getAccount(), amt);
+                                break;
+                            }
+                        }
+                    }
+                    else if (choice == 5) {
+                        c.showAccountInfo();
+                    }
+                    else if (choice == 6) {
+                        c.getAccount().showTransactions();
+                    }
+                }
+            }
+
+            if (!found) cout << "❌ Customer not found.\n";
+        }
+
+    } while (choice != 7);
+
+    cout << "Thank you for using the Banking System.\n";
+    return 0;
+}
