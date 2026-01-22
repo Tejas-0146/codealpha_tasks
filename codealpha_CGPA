@@ -4,7 +4,6 @@
 #include <iomanip>
 using namespace std;
 
-/* ---------- COURSE CLASS ---------- */
 class Course {
 public:
     string grade;
@@ -17,7 +16,7 @@ public:
         gradePoint = gp;
     }
 };
-/* ---------- CGPA CALCULATOR CLASS ---------- */
+
 class CGPACalculator {
 private:
     vector<Course> courses;
@@ -63,7 +62,7 @@ public:
     }
 };
 
-/* ---------- MAIN FUNCTION ---------- */
+
 int main() {
     CGPACalculator calculator;
     int choice, numCourses, credits;
