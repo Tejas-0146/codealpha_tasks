@@ -1,41 +1,115 @@
-🎓 CGPA Calculator (C++)
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <iomanip>
+using namespace std;
 
-A console-based C++ application to calculate semester-wise GPA and overall CGPA using a weighted average approach.
-Built with clean logic, modular structure, and academic grading standards in mind.
+/* ---------- COURSE CLASS ---------- */
+class Course {
+public:
+    string grade;
+    int credits;
+    double gradePoint;
 
-✨ Features
+    Course(string g, int c, double gp) {
+        grade = g;
+        credits = c;
+        gradePoint = gp;
+    }
+};
+/* ---------- CGPA CALCULATOR CLASS ---------- */
+class CGPACalculator {
+private:
+    vector<Course> courses;
+    double totalGradePoints = 0;
+    int totalCredits = 0;
 
-📚 Multi-semester CGPA calculation
+    double convertGradeToPoint(string grade) {
+        if (grade == "O") return 10;
+        if (grade == "A+") return 9;
+        if (grade == "A") return 8;
+        if (grade == "B+") return 7;
+        if (grade == "B") return 6;
+        if (grade == "C") return 5;
+        return 0; // F or invalid
+    }
 
-🧮 Weighted average formula
+public:
+    void addCourse(string grade, int credits) {
+        double gp = convertGradeToPoint(grade);
+        courses.push_back(Course(grade, credits, gp));
+        totalGradePoints += gp * credits;
+        totalCredits += credits;
+    }
 
-🔄 Grade-to-grade-point conversion
+    double calculateCGPA() {
+        return (totalCredits == 0) ? 0 : totalGradePoints / totalCredits;
+    }
 
-🧱 Scalable & modular C++ code
+    void displayResult() {
+        cout << fixed << setprecision(2);
+        cout << "\nTotal Credits : " << totalCredits << endl;
+        cout << "CGPA          : " << calculateCGPA() << endl;
+    }
 
-🖥️ User-friendly console interaction
+    void saveToFile() {
+        ofstream file("CGPA_Report.txt");
+        file << fixed << setprecision(2);
+        file << "----- CGPA REPORT -----\n";
+        file << "Total Credits : " << totalCredits << "\n";
+        file << "CGPA          : " << calculateCGPA() << "\n";
+        file.close();
+        cout << "Result saved to CGPA_Report.txt\n";
+    }
+};
 
-🛠️ Tech Stack
+/* ---------- MAIN FUNCTION ---------- */
+int main() {
+    CGPACalculator calculator;
+    int choice, numCourses, credits;
+    string grade;
 
-Language: C++
+    do {
+        cout << "\n====== CGPA MANAGEMENT SYSTEM ======\n";
+        cout << "1. Add Courses & Calculate CGPA\n";
+        cout << "2. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
 
-Compiler: GCC / MinGW
+        switch (choice) {
+        case 1:
+            cout << "Enter number of courses: ";
+            cin >> numCourses;
 
-IDE: VS Code / Code::Blocks
+            for (int i = 1; i <= numCourses; i++) {
+                cout << "\nCourse " << i << endl;
+                cout << "Enter grade (O, A+, A, B+, B, C, F): ";
+                cin >> grade;
+                cout << "Enter credits: ";
+                cin >> credits;
 
-Platform: Windows / Linux
+                if (credits <= 0) {
+                    cout << "Invalid credits! Try again.\n";
+                    i--;
+                    continue;
+                }
 
-📊 Grade Scale
-Grade	Points
-O	10
-A+	9
-A	8
-B+	7
-B	6
-C	5
-F	0
+                calculator.addCourse(grade, credits);
+            }
 
-ℹ️ Grade mapping can be modified easily in the source code.
+            calculator.displayResult();
+            calculator.saveToFile();
+            break;
 
-📐 CGPA Formula
-CGPA = ( Σ (GradePoint × Credits) ) / ( Σ Credits )
+        case 2:
+            cout << "Exiting program...\n";
+            break;
+
+        default:
+            cout << "Invalid choice!\n";
+        }
+
+    } while (choice != 2);
+
+    return 0;
+}
