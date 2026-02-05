@@ -1,115 +1,59 @@
-🎓 CGPA Calculator (C++)
+CGPA Calculator
+A simple CGPA calculator built using JavaScript, HTML, and CSS. This platform allows users to calculate their GPA for each semester and overall CGPA efficiently.
 
-A console-based C++ application to calculate semester-wise GPA and overall CGPA using a weighted average approach.
-Built with clean logic, modular structure, and academic grading standards in mind.
+🚀 Features
+📊 GPA & CGPA Calculation: Automatically calculates GPA for the current semester and cumulative CGPA.
+📅 Multiple Semester Support: Calculate CGPA over multiple semesters.
+📱 Responsive Design: Works seamlessly on both mobile and desktop.
+🛠️ Technologies Used
+HTML5 CSS3 JavaScript
 
-✨ Features
-> Multi-semester CGPA calculation
-> Weighted average formula
-> Grade-to-grade-point conversion
-> Scalable & modular C++ code
-> User-friendly console interaction
+📊 Language & Repo Stats
+Top Language Languages Count Repo Size Commit Activity Last Commit Issues Pull Requests
 
-🛠️ Tech Stack
-Language: C++
-Compiler: GCC / MinGW
-IDE: VS Code / Code::Blocks
-Platform: Windows / Linux
+📋 How CGPA is Calculated
+The CGPA (Cumulative Grade Point Average) is calculated based on the grades you achieve in each subject and their corresponding credits. Here’s how it works:
 
-Grade	Points
-O	               10
-A+	              9
-A	                8
-B+	              7
-B	                6
-C	                5
-F	                0
-ℹ️ Grade mapping can be modified easily in the source code.
-📌 UML Class Diagram
+Formula:
+CGPA = (Total Grade Points in all Semesters) / (Total Credits in all Semesters)
 
-The following UML diagram represents the logical structure of the CGPA Calculator system.
-It shows how student data, courses, and CGPA calculation logic are organized.
+GPA for each semester is calculated using:
 
-+------------------+
-|     Student      |
-+------------------+
-| - semesters      |
-+------------------+
-| + inputData()    |
-| + calculateCGPA()|
-+------------------+
-          |
-          |
-          v
-+------------------+
-|    Semester      |
-+------------------+
-| - courses        |
-| - semesterGPA    |
-+------------------+
-| + inputCourses() |
-| + calculateGPA() |
-+------------------+
-          |
-          |
-          v
-+------------------+
-|     Course       |
-+------------------+
-| - grade          |
-| - credits        |
-| - gradePoint     |
-+------------------+
-| + convertGrade() |
-+------------------+
+GPA = (Sum of [Grade Points × Credits]) / (Sum of Credits)
+Grade Points Table
+Grade	Grade Points	Credits
+O	10	Depends on the subject (typically 3 or 4 credits)
+A+	9	Depends on the subject
+A	8	Depends on the subject
+B+	7	Depends on the subject
+B	6	Depends on the subject
+RA	0	-
+The grades are assigned based on the marks obtained in each subject.
+Multiply the grade point by the corresponding credit hours to get the grade point for each subject.
+Sum the grade points for all subjects and divide by the total credits to get the GPA for the semester.
+The CGPA is the average of all semester GPAs, weighted by credits.
+📦 Installation
+To get the project running on your local machine:
 
-+---------------------------+
-|     CGPACalculator        |
-+---------------------------+
-| + calculateWeightedAvg()  |
-+---------------------------+
-
-
-📌 UML Activity Diagram (CGPA Calculation Flow)
-(Start)
-   |
-   v
-[Display Menu]
-   |
-   v
-[Enter Semester Count]
-   |
-   v
-[For each Semester]
-   |
-   v
-[Enter Courses, Grades, Credits]
-   |
-   v
-[Convert Grade to Grade Point]
-   |
-   v
-[Calculate Semester GPA]
-   |
-   v
-[Add to Total Credits & Points]
-   |
-   v
-[Calculate Final CGPA]
-   |
-   v
-(Display Result)
-   |
-  (End)
-  
-
-📌 UML Use Case Diagram
-       +--------+
-       |  User  |
-       +--------+
-            |
-            |
-   --------------------
-   |       |          |
-   v       v          v
-[Enter Data] [View GPA] [View CGPA]
+Clone the repository:
+git clone https://github.com/GokulakrishnanSivalingam/cgpa-calculator.git
+cd cgpa-calculator
+Releases
+No releases published
+Packages
+No packages published
+Deployments
+45
+ Production 10 months ago
+ github-pages 10 months ago
+ Preview 2 years ago
++ 42 deployments
+Languages
+JavaScript
+36.7%
+ 
+CSS
+35.9%
+ 
+HTML
+27.4%
